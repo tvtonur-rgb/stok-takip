@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)file:///Users/onurkaynar/Downloads/stok_takip_firebase_14.html -->
+<html lang="tr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Stok Takip</title>
+<link href="./Stok Takip2_files/css2" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --b50:#E6F1FB;--b200:#85B7EB;--b400:#378ADD;--b600:#185FA5;--b800:#0C447C;--b900:#042C53;
+  --a50:#FAEEDA;--a200:#EF9F27;--a600:#854F0B;--a800:#633806;
+  --g50:#EAF3DE;--g200:#97C459;--g600:#3B6D11;--g800:#27500A;
+  --r50:#FCEBEB;--r200:#F09595;--r600:#A32D2D;
+  --gr50:#F7F6F3;--gr100:#EEECE6;--gr200:#D3D1C7;--gr400:#888780;--gr600:#5F5E5A;--gr800:#2C2C2A;
+  --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  --rad:10px;--radl:16px;--pill:999px;
+}
+body{font-family:var(--font);background:#F0EDE6;color:var(--gr800);min-height:100vh}
+
+/* HEADER */
+header{background:var(--b900);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:200}
+.logo{font-size:15px;font-weight:600;color:white;display:flex;align-items:center;gap:8px}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:var(--b400)}
+.hbtns{display:flex;align-items:center;gap:8px}
+.hbtn{padding:5px 12px;border-radius:var(--pill);border:1px solid rgba(255,255,255,0.2);background:transparent;color:var(--b200);font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;position:relative;transition:all 0.15s}
+.hbtn:hover{background:rgba(255,255,255,0.1);color:white}
+.sync{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--b200)}
+.sdot{width:7px;height:7px;border-radius:50%;background:#97C459}
+.sdot.s{background:#EF9F27;animation:pulse 1s infinite}
+.sdot.e{background:#F09595}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.nbadge{position:absolute;top:-4px;right:-4px;background:#EF9F27;color:white;font-size:9px;font-weight:700;border-radius:50%;width:15px;height:15px;display:none;align-items:center;justify-content:center}
+
+/* CONTAINER */
+.wrap{max-width:1000px;margin:0 auto;padding:1.5rem}
+
+/* STAFF PANEL */
+.staff-panel{background:white;border-radius:var(--radl);border:1.5px solid var(--gr100);padding:12px 16px;margin-bottom:1.25rem;display:none}
+.staff-panel-title{font-size:11px;font-weight:600;color:var(--gr400);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.staff-list{display:flex;flex-wrap:wrap;gap:8px}
+.staff-item{display:flex;align-items:center;gap:8px;background:var(--gr50);border:1.5px solid var(--gr100);border-radius:var(--pill);padding:5px 14px}
+.staff-name{font-size:13px;font-weight:500}
+.staff-btn{padding:3px 10px;border-radius:var(--pill);border:none;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s}
+
+/* STAT */
+.stat-card{display:inline-block;background:var(--a50);border-radius:var(--radl);padding:16px 20px;margin-bottom:1.25rem;min-width:160px}
+.stat-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--a600);margin-bottom:4px}
+.stat-value{font-size:30px;font-weight:600;font-family:var(--mono);color:var(--a800)}
+
+/* TABS */
+.tabs-label{font-size:11px;font-weight:600;color:var(--gr400);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem}
+.tab{padding:8px 18px;border-radius:var(--pill);border:1.5px solid var(--gr200);background:white;font-family:var(--font);font-size:13px;font-weight:500;color:var(--gr600);cursor:pointer;transition:all .15s}
+.tab:hover:not(.active){border-color:var(--b400);color:var(--b600);background:var(--b50)}
+.tab.active{background:var(--b600);border-color:var(--b600);color:white}
+.tab-add{padding:8px 14px;border-radius:var(--pill);border:1.5px dashed var(--gr200);background:transparent;font-family:var(--font);font-size:13px;color:var(--gr400);cursor:pointer;transition:all .15s}
+.tab-add:hover{border-color:var(--b400);color:var(--b600)}
+
+/* TABLE HEADER */
+.tbl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.tbl-title{font-size:14px;font-weight:600;color:var(--gr800)}
+.tbl-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.search-wrap{position:relative}
+.search-wrap input{padding:7px 12px 7px 32px;border:1.5px solid var(--gr200);border-radius:var(--pill);font-family:var(--font);font-size:13px;background:white;color:var(--gr800);width:200px;transition:all .15s}
+.search-wrap input:focus{outline:none;border-color:var(--b600);width:240px}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--gr400);pointer-events:none}
+.search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gr400);font-size:12px;display:none}
+.search-clear.v{display:block}
+.btn-add{padding:7px 14px;border-radius:var(--pill);border:none;background:var(--b600);color:white;font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap}
+.btn-add:hover{background:var(--b800)}
+
+/* TABLE */
+.tbl-wrap{background:white;border-radius:var(--radl);border:1.5px solid var(--gr100);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--b900);color:var(--b200);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;padding:10px 14px;text-align:left}
+tbody tr.mrow td{padding:12px 14px;border-bottom:1px solid var(--gr100);font-size:14px;vertical-align:middle;transition:background .1s}
+tbody tr.mrow:hover td{background:var(--gr50)}
+.mname{font-weight:600}
+.num{font-family:var(--mono);font-size:14px;font-weight:500}
+.nb{color:var(--b600)}.na{color:var(--a600)}.ng{color:var(--g600)}
+.badge{display:inline-block;padding:3px 9px;border-radius:var(--pill);font-size:12px;font-weight:600}
+.bg{background:var(--g50);color:var(--g600);border:1px solid #C0DD97}
+.ba{background:var(--a50);color:var(--a600);border:1px solid #FAC775}
+.br{background:var(--r50);color:var(--r600);border:1px solid #F7C1C1}
+.abtn{padding:5px 10px;border-radius:var(--pill);font-family:var(--font);font-size:12px;font-weight:500;border:none;cursor:pointer;transition:all .12s;margin-right:3px;white-space:nowrap}
+.ab-res{background:var(--b50);color:var(--b600);border:1px solid var(--b200)}
+.ab-res:hover,.ab-res.on{background:var(--b600);color:white}
+.ab-stk{background:var(--a50);color:var(--a600);border:1px solid #FAC775}
+.ab-stk:hover,.ab-stk.on{background:var(--a600);color:white}
+.ab-del{background:var(--r50);color:var(--r600);border:1px solid var(--r200)}
+.ab-del:hover{background:var(--r200)}
+
+/* INLINE FORMS */
+.iform td{padding:0!important;border-bottom:1px solid var(--gr100)!important}
+
+.stock-form{background:linear-gradient(to right,var(--a50),#fffdf5);border-top:2px solid #FAC775;padding:12px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stock-form label{font-size:11px;font-weight:600;color:var(--a600);text-transform:uppercase}
+.stepper{display:flex;align-items:center;gap:6px}
+.stepper button{width:32px;height:32px;border-radius:50%;border:1.5px solid #FAC775;background:white;font-size:18px;font-weight:600;color:var(--a600);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.stepper button:hover{background:var(--a600);color:white;border-color:var(--a600)}
+.stepper input{width:60px;padding:6px;border:1.5px solid #FAC775;border-radius:var(--rad);font-family:var(--mono);font-size:15px;text-align:center;background:white;color:var(--gr800)}
+.stepper input:focus{outline:none;border-color:var(--a600)}
+.sbtn{padding:7px 14px;border-radius:var(--pill);border:none;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer}
+.sbtn-add{background:var(--a600);color:white}
+.sbtn-sub{background:var(--r600);color:white}
+.sbtn-cancel{background:white;border:1.5px solid var(--gr200)!important;border:none;color:var(--gr600)}
+
+.res-form{background:linear-gradient(to right,var(--b50),#f5f9ff);border-top:2px solid var(--b400);padding:12px 14px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.ff{display:flex;flex-direction:column;gap:3px;flex:1;min-width:110px}
+.ff label{font-size:11px;font-weight:600;color:var(--b600);text-transform:uppercase;letter-spacing:.05em}
+.ff input,.ff select{padding:7px 9px;border:1.5px solid var(--b200);border-radius:var(--rad);font-family:var(--font);font-size:13px;background:white;color:var(--gr800);width:100%}
+.ff input:focus,.ff select:focus{outline:none;border-color:var(--b600)}
+.rbtn-save{padding:7px 16px;border-radius:var(--pill);border:none;background:var(--b600);color:white;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;align-self:flex-end;white-space:nowrap}
+.rbtn-save:hover{background:var(--b800)}
+.rbtn-cancel{padding:7px 12px;border-radius:var(--pill);border:1.5px solid var(--gr200);background:white;font-family:var(--font);font-size:13px;color:var(--gr600);cursor:pointer;align-self:flex-end}
+
+/* RESERVATIONS LIST */
+.res-list-wrap td{padding:0!important;border-bottom:1px solid var(--gr100)!important}
+.res-list{background:#fafaf8;border-top:1px dashed var(--gr200);padding:8px 14px}
+.res-list-title{font-size:11px;font-weight:600;color:var(--gr400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+.res-item{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:var(--rad);background:white;border:1px solid var(--gr100);margin-bottom:5px;flex-wrap:wrap}
+.res-item:last-child{margin-bottom:0}
+.chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--pill);font-size:12px;background:var(--gr50);color:var(--gr600);border:1px solid var(--gr100)}
+.chip.cn{background:var(--b50);color:var(--b800);border-color:var(--b200)}
+.chip.cd{background:var(--a50);color:var(--a800);border-color:#FAC775}
+.chip-use{margin-left:auto;padding:3px 9px;border-radius:var(--pill);border:none;background:var(--g50);color:var(--g600);font-family:var(--font);font-size:11px;font-weight:600;cursor:pointer;margin-right:4px}
+.chip-use:hover{background:var(--g600);color:white}
+.chip-del{padding:3px 9px;border-radius:var(--pill);border:none;background:var(--r50);color:var(--r600);font-family:var(--font);font-size:11px;cursor:pointer}
+.chip-del:hover{background:var(--r200)}
+
+/* MODALS */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(4,44,83,.5);z-index:300;align-items:center;justify-content:center}
+.modal-ov.open{display:flex}
+.modal{background:white;border-radius:var(--radl);padding:22px;width:380px;max-width:92vw}
+.modal h3{font-size:15px;font-weight:600;margin-bottom:14px}
+.modal input{width:100%;padding:8px 11px;border:1.5px solid var(--gr200);border-radius:var(--rad);font-family:var(--font);font-size:14px;color:var(--gr800);margin-bottom:10px}
+.modal input:focus{outline:none;border-color:var(--b600)}
+.mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+.mbtn-cancel{padding:7px 14px;border-radius:var(--pill);border:1.5px solid var(--gr200);background:transparent;font-family:var(--font);font-size:13px;color:var(--gr600);cursor:pointer}
+.mbtn-save{padding:7px 18px;border-radius:var(--pill);border:none;background:var(--b600);color:white;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer}
+.mbtn-save:hover{background:var(--b800)}
+.user-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:var(--rad);background:var(--gr50);border:1px solid var(--gr100);margin-bottom:6px;font-size:14px;font-weight:500}
+.user-del{padding:3px 9px;border-radius:var(--pill);border:none;background:var(--r50);color:var(--r600);font-size:11px;cursor:pointer;font-family:var(--font)}
+.user-del:hover{background:var(--r200)}
+.uadd-row{display:flex;gap:8px}
+.uadd-row input{flex:1;margin-bottom:0!important}
+.uadd-btn{padding:8px 14px;border-radius:var(--pill);border:none;background:var(--b600);color:white;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+
+/* LOG PANEL */
+.log-overlay{display:none;position:fixed;inset:0;z-index:250}
+.log-overlay.open{display:block}
+.log-panel{position:fixed;top:58px;right:0;width:380px;max-width:95vw;height:calc(100vh - 58px);background:white;border-left:1.5px solid var(--gr100);box-shadow:-4px 0 24px rgba(4,44,83,.12);z-index:251;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
+.log-panel.open{transform:translateX(0)}
+.log-head{padding:14px 16px;background:var(--b900);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.log-head h3{font-size:14px;font-weight:600;color:white}
+.log-close{background:none;border:none;color:var(--b200);font-size:18px;cursor:pointer;padding:2px 6px}
+.log-close:hover{color:white}
+.log-filters{padding:8px 14px;border-bottom:1px solid var(--gr100);display:flex;gap:5px;flex-wrap:wrap;flex-shrink:0}
+.lf-btn{padding:4px 10px;border-radius:var(--pill);border:1.5px solid var(--gr200);background:white;font-family:var(--font);font-size:11px;font-weight:600;color:var(--gr600);cursor:pointer}
+.lf-btn.on{background:var(--b600);border-color:var(--b600);color:white}
+.log-list{flex:1;overflow-y:auto;padding:6px 0}
+.log-item{padding:10px 14px;border-bottom:1px solid var(--gr50)}
+.log-item:hover{background:var(--gr50)}
+.li-top{display:flex;align-items:center;gap:7px;margin-bottom:3px}
+.li-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.li-type{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.li-time{font-size:11px;color:var(--gr400);margin-left:auto;white-space:nowrap}
+.li-where{font-size:12px;margin-bottom:2px}
+.li-part{font-weight:600;color:var(--b600)}
+.li-model{color:var(--gr600)}
+.li-desc{font-size:13px;color:var(--gr800)}
+.log-empty{text-align:center;padding:3rem;color:var(--gr400);font-size:14px}
+.log-foot{padding:10px 14px;border-top:1px solid var(--gr100);flex-shrink:0}
+.log-clear-btn{width:100%;padding:8px;border-radius:var(--pill);border:1.5px solid var(--r200);background:white;color:var(--r600);font-family:var(--font);font-size:13px;cursor:pointer}
+.log-clear-btn:hover{background:var(--r50)}
+
+.empty{text-align:center;padding:3rem;color:var(--gr400);font-size:14px}
+.loading{text-align:center;padding:3rem;color:var(--b400);font-size:14px}
+.hl{background:#FFF176;border-radius:3px;padding:0 2px}
+
+@media(max-width:600px){
+  header{padding:0 1rem}
+  .wrap{padding:1rem}
+  .hbtn span:not(.nbadge){display:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><div class="logo-dot"></div>Stok Takip</div>
+  <div class="hbtns">
+    <div class="sync"><div class="sdot" id="sdot"></div><span id="stxt">Canlı</span></div>
+    <button class="hbtn" id="logBtn" onclick="toggleLog()">📋 <span>Hareketler</span><span class="nbadge" id="nbadge" style="display: flex;">2</span></button>
+    <button class="hbtn" onclick="openM(&#39;usersM&#39;)">⚙ <span>Kullanıcılar</span></button>
+  </div>
+</header>
+
+<!-- LOG OVERLAY + PANEL -->
+<div class="log-overlay" id="logOverlay" onclick="handleOverlayClick(event)">
+  <div class="log-panel" id="logPanel">
+    <div class="log-head">
+      <h3>📋 Hareket Geçmişi</h3>
+      <button class="log-close" onclick="toggleLog()">✕</button>
+    </div>
+    <div class="log-filters">
+      <button class="lf-btn on" data-f="all" onclick="setLF(this)">Tümü</button>
+      <button class="lf-btn" data-f="reserve" onclick="setLF(this)">Rezervasyon</button>
+      <button class="lf-btn" data-f="use" onclick="setLF(this)">Kullanım</button>
+      <button class="lf-btn" data-f="stock" onclick="setLF(this)">Stok</button>
+      <button class="lf-btn" data-f="cancel" onclick="setLF(this)">İptal</button>
+    </div>
+    <div class="log-list" id="logList"></div>
+    <div class="log-foot"><button class="log-clear-btn" onclick="clearLogs()">Geçmişi Temizle</button></div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-ov" id="usersM">
+  <div class="modal">
+    <h3>👥 Kullanıcı Yönetimi</h3>
+    <p style="font-size:13px;color:var(--gr400);margin-bottom:12px">Rezervasyon yapabilecek kullanıcıları ekle.</p>
+    <div id="userList" style="margin-bottom:10px"><div class="user-item">Onur<button class="user-del" onclick="delUser(0)">Sil</button></div><div class="user-item">Rauf<button class="user-del" onclick="delUser(1)">Sil</button></div><div class="user-item">Ufuk<button class="user-del" onclick="delUser(2)">Sil</button></div><div class="user-item">Mert<button class="user-del" onclick="delUser(3)">Sil</button></div><div class="user-item">Özer<button class="user-del" onclick="delUser(4)">Sil</button></div><div class="user-item">Burak<button class="user-del" onclick="delUser(5)">Sil</button></div><div class="user-item">Hilal<button class="user-del" onclick="delUser(6)">Sil</button></div><div class="user-item">Uğur<button class="user-del" onclick="delUser(7)">Sil</button></div><div class="user-item">Emin<button class="user-del" onclick="delUser(8)">Sil</button></div></div>
+    <div class="uadd-row">
+      <input id="newUserInput" placeholder="Yeni kullanıcı adı...">
+      <button class="uadd-btn" onclick="addUser()">+ Ekle</button>
+    </div>
+    <div class="mbtns"><button class="mbtn-cancel" onclick="closeM(&#39;usersM&#39;)">Kapat</button></div>
+  </div>
+</div>
+
+<div class="modal-ov" id="partM">
+  <div class="modal">
+    <h3>Yeni Parça Ekle</h3>
+    <input id="partNameInput" placeholder="Parça adı (örn: Ekran)">
+    <div class="mbtns">
+      <button class="mbtn-cancel" onclick="closeM(&#39;partM&#39;)">İptal</button>
+      <button class="mbtn-save" onclick="addPart()">Ekle</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-ov" id="modelM">
+  <div class="modal">
+    <h3>Yeni Model Ekle</h3>
+    <input id="modelNameInput" placeholder="Model adı (örn: iPhone 15)">
+    <input id="modelStockInput" type="number" placeholder="Başlangıç stok miktarı" min="0">
+    <div class="mbtns">
+      <button class="mbtn-cancel" onclick="closeM(&#39;modelM&#39;)">İptal</button>
+      <button class="mbtn-save" onclick="addModel()">Ekle</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="wrap">
+  <div class="staff-panel" id="staffPanel" style="display: block;">
+    <div class="staff-panel-title">👥 Personel Durumu</div>
+    <div class="staff-list" id="staffList"><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Onur</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div><div class="staff-item" style="border-color: rgb(192, 221, 151);"><span class="staff-name">Rauf</span><button class="staff-btn" style="background: rgb(234, 243, 222); color: var(--g600);">✓ Müsait</button></div><div class="staff-item" style="border-color: rgb(192, 221, 151);"><span class="staff-name">Ufuk</span><button class="staff-btn" style="background: rgb(234, 243, 222); color: var(--g600);">✓ Müsait</button></div><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Mert</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Özer</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Burak</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Hilal</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Uğur</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Emin</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div></div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">🕐 Rezerve</div>
+    <div class="stat-value" id="totalReserved">0</div>
+  </div>
+
+  <div class="tabs-label">Parçalar</div>
+  <div class="tabs" id="tabs"><button class="tab active">Batarya</button><button class="tab">Ekran</button><button class="tab">Kamera</button><button class="tab">Face ID</button><button class="tab">Arka Cam</button><button class="tab">Airpods</button><button class="tab-add">+ Parça Ekle</button></div>
+
+  <div class="tbl-header">
+    <div class="tbl-title" id="tblTitle">Modeller — Batarya</div>
+    <div class="tbl-actions">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="srch" placeholder="Model ara..." oninput="onSearch(this.value)">
+        <button class="search-clear" id="srchClear" onclick="clearSearch()">✕</button>
+      </div>
+      <button class="btn-add" onclick="openM(&#39;modelM&#39;)">+ Model Ekle</button>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Model</th><th>Stok</th><th>Rezerve</th><th>Kalan</th><th>Durum</th><th>İşlem</th></tr>
+      </thead>
+      <tbody id="tbody"><tr class="mrow"><td class="mname">iPhone SE 3</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;KXmx7N8Yx1HToteQRfLY&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;KXmx7N8Yx1HToteQRfLY&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;KXmx7N8Yx1HToteQRfLY&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 11</td>
+      <td><span class="num nb">0</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">0</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;7sk4iW6OiiTDYFWOlvwZ&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;7sk4iW6OiiTDYFWOlvwZ&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;7sk4iW6OiiTDYFWOlvwZ&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 12 Mini</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;G5VbzzeHYwRDGARvBVBN&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;G5VbzzeHYwRDGARvBVBN&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;G5VbzzeHYwRDGARvBVBN&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 12 / Pro</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;KZnM6E5Yb58NZa8e0Fts&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;KZnM6E5Yb58NZa8e0Fts&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;KZnM6E5Yb58NZa8e0Fts&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 12 Pro Max</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;bmRnDAuw0v8FZvx9NeWx&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;bmRnDAuw0v8FZvx9NeWx&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;bmRnDAuw0v8FZvx9NeWx&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 13 Mini</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;uWZsGvZpGrbGLOhO8LSI&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;uWZsGvZpGrbGLOhO8LSI&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;uWZsGvZpGrbGLOhO8LSI&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 13</td>
+      <td><span class="num nb">0</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">0</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;oCFFX6COVHVfk0zdS0sb&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;oCFFX6COVHVfk0zdS0sb&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;oCFFX6COVHVfk0zdS0sb&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 13 Pro</td>
+      <td><span class="num nb">2</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">2</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;PlcQhNmFnYu1WdQap2RY&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;PlcQhNmFnYu1WdQap2RY&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;PlcQhNmFnYu1WdQap2RY&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 13 Pro Max</td>
+      <td><span class="num nb">0</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">0</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;7AaLm9qp1FY40rPKkntc&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;7AaLm9qp1FY40rPKkntc&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;7AaLm9qp1FY40rPKkntc&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 14</td>
+      <td><span class="num nb">0</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">0</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;V23oRxPV1aUeVTKOELx3&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;V23oRxPV1aUeVTKOELx3&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;V23oRxPV1aUeVTKOELx3&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 14 Plus</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;xK1ZwBOI1ZzM772qqYpx&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;xK1ZwBOI1ZzM772qqYpx&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;xK1ZwBOI1ZzM772qqYpx&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 14 Pro</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;LI3bGJV1mXSeuLdtDEup&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;LI3bGJV1mXSeuLdtDEup&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;LI3bGJV1mXSeuLdtDEup&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 14 Pro Max</td>
+      <td><span class="num nb">0</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">0</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;fNL3NM6RdpaPUINmel53&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;fNL3NM6RdpaPUINmel53&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;fNL3NM6RdpaPUINmel53&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 15</td>
+      <td><span class="num nb">0</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">0</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;mbOoP1t02FXU7DD32fOg&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;mbOoP1t02FXU7DD32fOg&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;mbOoP1t02FXU7DD32fOg&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 15 Plus</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;vW0j0XPxgkwgQYBXyCqf&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;vW0j0XPxgkwgQYBXyCqf&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;vW0j0XPxgkwgQYBXyCqf&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 15 Pro</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;saotMyM1d1dP1ScWJnKc&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;saotMyM1d1dP1ScWJnKc&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;saotMyM1d1dP1ScWJnKc&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 15 Pro Max</td>
+      <td><span class="num nb">0</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">0</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ukQmHGD0ClrJJgMLCN36&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ukQmHGD0ClrJJgMLCN36&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ukQmHGD0ClrJJgMLCN36&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 16E</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;c0uPaQGaUXfvt2JOovIg&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;c0uPaQGaUXfvt2JOovIg&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;c0uPaQGaUXfvt2JOovIg&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 16</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;FGrU4dlG6YNaijZBwKoV&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;FGrU4dlG6YNaijZBwKoV&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;FGrU4dlG6YNaijZBwKoV&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 16 Plus</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;8v1Z2YfqlsrAKIdxapsW&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;8v1Z2YfqlsrAKIdxapsW&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;8v1Z2YfqlsrAKIdxapsW&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 16 Pro</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ueT8Jiiox6eFSiC0xQ7F&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ueT8Jiiox6eFSiC0xQ7F&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ueT8Jiiox6eFSiC0xQ7F&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 16 Pro Max</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;8Ms4cZ97Uroh1fPErpgb&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;8Ms4cZ97Uroh1fPErpgb&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;8Ms4cZ97Uroh1fPErpgb&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 17E</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;nfBRaEwUgZQ71kK3b9vw&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;nfBRaEwUgZQ71kK3b9vw&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;nfBRaEwUgZQ71kK3b9vw&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 17</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;W0WrDJHsTqS86wCn0WII&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;W0WrDJHsTqS86wCn0WII&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;W0WrDJHsTqS86wCn0WII&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 17 Pro</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;zfRlzmzNc1FQNwc4GS5G&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;zfRlzmzNc1FQNwc4GS5G&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;zfRlzmzNc1FQNwc4GS5G&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone 17 Pro Max</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ITdRMtUW0KleOr2nWZAS&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ITdRMtUW0KleOr2nWZAS&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ITdRMtUW0KleOr2nWZAS&#39;)">Sil</button>
+      </td></tr><tr class="mrow"><td class="mname">iPhone Air</td>
+      <td><span class="num nb">1</span></td>
+      <td><span class="num na">0</span></td>
+      <td><span class="num ng">1</span></td>
+      <td><span class="badge br">Kritik</span></td>
+      <td>
+        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;uOCW7sVwpF69jloyBjRe&#39;)">Rezerve Et</button>
+        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;uOCW7sVwpF69jloyBjRe&#39;)">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;uOCW7sVwpF69jloyBjRe&#39;)">Sil</button>
+      </td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, collection, doc, onSnapshot,
+  addDoc, updateDoc, deleteDoc, getDocs, setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const FB = {
+  apiKey:"AIzaSyB9fNtlYxXb7UyXwWO94OP-u9S3rD0BQZ0",
+  authDomain:"stok-takip-79a92.firebaseapp.com",
+  projectId:"stok-takip-79a92",
+  storageBucket:"stok-takip-79a92.firebasestorage.app",
+  messagingSenderId:"57524444104",
+  appId:"1:57524444104:web:49145e80423554226f7efd"
+};
+const app = initializeApp(FB);
+const db  = getFirestore(app);
+
+// ── STATE ──
+let parts      = [];
+let users      = [];
+let staffSt    = {};
+let logs       = [];
+let activePart = localStorage.getItem('ap') || '';
+let openForm   = null;   // {type:'reserve'|'stock', partId, modelId}
+let logOpen    = false;
+let logFilter  = 'all';
+let unread     = 0;
+let busy       = false;
+let srchQ      = '';
+
+// ── SYNC UI ──
+function setSyncStatus(s){
+  document.getElementById('sdot').className='sdot'+(s==='s'?' s':s==='e'?' e':'');
+  document.getElementById('stxt').textContent=s==='ok'?'Canlı':s==='s'?'Senkronize ediliyor...':'Bağlantı hatası';
+}
+
+// ── HELPERS ──
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function fmtTime(ts){
+  const d=new Date(ts);
+  return d.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'})+' '
+        +d.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+}
+function getAP(){return parts.find(p=>p.id===activePart)}
+function status(k){return k>20?{l:'Yeterli',c:'bg'}:k>5?{l:'Az',c:'ba'}:{l:'Kritik',c:'br'}}
+
+// ── ADDLOG ──
+async function addLog(type,partName,modelName,desc){
+  try{
+    await addDoc(collection(db,'logs'),{type,partName,modelName,desc,ts:Date.now()});
+  }catch(e){console.warn('Log yazılamadı:',e)}
+}
+
+// ── REALTIME LISTENERS ──
+function start(){
+  setSyncStatus('s');
+
+  // Users + Staff
+  onSnapshot(doc(db,'config','users'),snap=>{
+    users  = snap.exists()?(snap.data().list||[]):[];
+    staffSt= snap.exists()?(snap.data().status||{}):{};
+    renderUserList();
+    renderStaff();
+  },e=>console.warn(e));
+
+  // Parts
+  onSnapshot(collection(db,'parts'),snap=>{
+    snap.docChanges().forEach(ch=>{
+      if(ch.type==='added'){
+        if(!parts.find(p=>p.id===ch.doc.id)){
+          parts.push({id:ch.doc.id,...ch.doc.data(),models:[]});
+          listenModels(ch.doc.id);
+        }
+      } else if(ch.type==='modified'){
+        const p=parts.find(p=>p.id===ch.doc.id);
+        if(p) Object.assign(p,ch.doc.data());
+      } else if(ch.type==='removed'){
+        parts=parts.filter(p=>p.id!==ch.doc.id);
+      }
+    });
+    parts.sort((a,b)=>(a.order||0)-(b.order||0));
+    if(!activePart&&parts.length>0) activePart=parts[0].id;
+    setSyncStatus('ok');
+    render();
+  },e=>{console.error(e);setSyncStatus('e')});
+
+  // Logs
+  onSnapshot(collection(db,'logs'),snap=>{
+    snap.docChanges().forEach(ch=>{
+      if(ch.type==='added'&&!logs.find(l=>l.id===ch.doc.id)){
+        logs.unshift({id:ch.doc.id,...ch.doc.data()});
+        if(!logOpen){
+          unread++;
+          const b=document.getElementById('nbadge');
+          b.style.display='flex';
+          b.textContent=unread>9?'9+':String(unread);
+        }
+      } else if(ch.type==='removed'){
+        logs=logs.filter(l=>l.id!==ch.doc.id);
+      }
+    });
+    logs.sort((a,b)=>(b.ts||0)-(a.ts||0));
+    if(logOpen) renderLogs();
+  },e=>console.warn('log err',e));
+}
+
+function listenModels(partId){
+  onSnapshot(collection(db,'parts',partId,'models'),snap=>{
+    const part=parts.find(p=>p.id===partId);
+    if(!part) return;
+    snap.docChanges().forEach(ch=>{
+      if(ch.type==='added'){
+        if(!part.models.find(m=>m.id===ch.doc.id)){
+          part.models.push({id:ch.doc.id,...ch.doc.data(),reservations:[]});
+          listenRes(partId,ch.doc.id);
+        }
+      } else if(ch.type==='modified'){
+        const m=part.models.find(m=>m.id===ch.doc.id);
+        if(m) Object.assign(m,ch.doc.data());
+      } else if(ch.type==='removed'){
+        part.models=part.models.filter(m=>m.id!==ch.doc.id);
+      }
+    });
+    part.models.sort((a,b)=>{
+      if(a.createdAt&&b.createdAt) return a.createdAt-b.createdAt;
+      const na=parseFloat(a.name),nb=parseFloat(b.name);
+      if(!isNaN(na)&&!isNaN(nb)) return na-nb;
+      return a.name.localeCompare(b.name,'tr');
+    });
+    render();
+  },e=>console.warn(e));
+}
+
+function listenRes(partId,modelId){
+  onSnapshot(collection(db,'parts',partId,'models',modelId,'reservations'),snap=>{
+    const part=parts.find(p=>p.id===partId);
+    if(!part) return;
+    const model=part.models.find(m=>m.id===modelId);
+    if(!model) return;
+    snap.docChanges().forEach(ch=>{
+      if(ch.type==='added'&&!model.reservations.find(r=>r.id===ch.doc.id))
+        model.reservations.push({id:ch.doc.id,...ch.doc.data()});
+      else if(ch.type==='removed')
+        model.reservations=model.reservations.filter(r=>r.id!==ch.doc.id);
+    });
+    render();
+  },e=>console.warn(e));
+}
+
+// ── RENDER ──
+function render(){renderTabs();renderStats();renderModels();renderStaff()}
+
+function renderTabs(){
+  const c=document.getElementById('tabs');
+  c.innerHTML='';
+  parts.forEach(p=>{
+    const b=document.createElement('button');
+    b.className='tab'+(p.id===activePart?' active':'');
+    b.textContent=p.name;
+    b.onclick=()=>{activePart=p.id;localStorage.setItem('ap',p.id);openForm=null;srchQ='';const si=document.getElementById('srch');if(si)si.value='';const sc=document.getElementById('srchClear');if(sc)sc.className='search-clear';render()};
+    c.appendChild(b);
+  });
+  const a=document.createElement('button');
+  a.className='tab-add';a.textContent='+ Parça Ekle';
+  a.onclick=()=>openM('partM');
+  c.appendChild(a);
+}
+
+function renderStats(){
+  const part=getAP();
+  if(!part){document.getElementById('totalReserved').textContent='—';return}
+  let res=0;
+  part.models.forEach(m=>res+=m.reservations.length);
+  document.getElementById('totalReserved').textContent=res;
+  document.getElementById('tblTitle').textContent='Modeller — '+part.name;
+}
+
+function renderStaff(){
+  const panel=document.getElementById('staffPanel');
+  const list=document.getElementById('staffList');
+  if(!panel||!list) return;
+  if(!users.length){panel.style.display='none';return}
+  panel.style.display='block';
+  list.innerHTML='';
+  users.forEach(u=>{
+    const isAv=(staffSt[u]||'available')==='available';
+    const div=document.createElement('div');
+    div.className='staff-item';
+    div.style.borderColor=isAv?'#C0DD97':'#F7C1C1';
+    div.innerHTML='<span class="staff-name">'+esc(u)+'</span>';
+    const btn=document.createElement('button');
+    btn.className='staff-btn';
+    btn.style.background=isAv?'#EAF3DE':'#FCEBEB';
+    btn.style.color=isAv?'var(--g600)':'var(--r600)';
+    btn.textContent=isAv?'✓ Müsait':'✗ Müsait Değil';
+    btn.onclick=()=>toggleStaff(u);
+    div.appendChild(btn);
+    list.appendChild(div);
+  });
+}
+
+function renderUserList(){
+  const c=document.getElementById('userList');
+  if(!c) return;
+  if(!users.length){c.innerHTML='<div style="font-size:13px;color:var(--gr400);padding:6px 0">Henüz kullanıcı eklenmedi.</div>';return}
+  c.innerHTML=users.map((u,i)=>
+    '<div class="user-item">'+esc(u)+'<button class="user-del" onclick="delUser('+i+')">Sil</button></div>'
+  ).join('');
+}
+
+function renderModels(){
+  const part=getAP();
+  const tb=document.getElementById('tbody');
+  tb.innerHTML='';
+  if(!part){return}
+  const list=srchQ?part.models.filter(m=>m.name.toLowerCase().includes(srchQ)):part.models;
+  if(!list.length){
+    tb.innerHTML='<tr><td colspan="6" class="'+(srchQ?'empty':'empty')+'">'+(srchQ?'Sonuç bulunamadı.':'Henüz model eklenmedi.')+'</td></tr>';
+    return;
+  }
+  list.forEach(m=>{
+    const res=m.reservations.length;
+    const kal=(m.stock||0)-res;
+    const st=status(kal);
+    const isRes=openForm&&openForm.type==='reserve'&&openForm.modelId===m.id;
+    const isStk=openForm&&openForm.type==='stock'&&openForm.modelId===m.id;
+    const dname=srchQ?esc(m.name).replace(new RegExp('('+esc(srchQ)+')','gi'),'<span class="hl">$1</span>'):esc(m.name);
+
+    // main row
+    const tr=document.createElement('tr');
+    tr.className='mrow';
+    tr.innerHTML=`<td class="mname">${dname}</td>
+      <td><span class="num nb">${m.stock||0}</span></td>
+      <td><span class="num na">${res}</span></td>
+      <td><span class="num ng">${kal}</span></td>
+      <td><span class="badge ${st.c}">${st.l}</span></td>
+      <td>
+        <button class="abtn ab-res${isRes?' on':''}" onclick="toggleForm('reserve','${part.id}','${m.id}')">Rezerve Et</button>
+        <button class="abtn ab-stk${isStk?' on':''}" onclick="toggleForm('stock','${part.id}','${m.id}')">Stok Güncelle</button>
+        <button class="abtn ab-del" onclick="delModel('${part.id}','${m.id}')">Sil</button>
+      </td>`;
+    tb.appendChild(tr);
+
+    // stock form
+    if(isStk){
+      const sr=document.createElement('tr');sr.className='iform';
+      sr.innerHTML=`<td colspan="6"><div class="stock-form">
+        <label>Stok değiştir</label>
+        <div class="stepper">
+          <button onclick="stepStock('${m.id}',-1)">−</button>
+          <input type="number" id="si_${m.id}" value="1" min="1"/>
+          <button onclick="stepStock('${m.id}',1)">+</button>
+        </div>
+        <button class="sbtn sbtn-add" onclick="saveStock('${part.id}','${m.id}',1)">Ekle</button>
+        <button class="sbtn sbtn-sub" onclick="saveStock('${part.id}','${m.id}',-1)">Çıkar</button>
+        <button class="sbtn sbtn-cancel" onclick="toggleForm(null)" style="border:1.5px solid var(--gr200)">İptal</button>
+      </div></td>`;
+      tb.appendChild(sr);
+    }
+
+    // reserve form
+    if(isRes){
+      const opts=users.length
+        ?'<option value="">Seç...</option>'+users.map(u=>'<option>'+esc(u)+'</option>').join('')
+        :'<option value="">— Önce kullanıcı ekleyin —</option>';
+      const fr=document.createElement('tr');fr.className='iform';
+      fr.innerHTML=`<td colspan="6"><div class="res-form">
+        <div class="ff"><label>Ad Soyad</label><input id="rn" placeholder="Müşteri adı"/></div>
+        <div class="ff"><label>Telefon</label><input id="rt" placeholder="0532 000 00 00"/></div>
+        <div class="ff"><label>Tarih</label><input id="rd" type="date"/></div>
+        <div class="ff"><label>Saat</label><input id="rh" type="time"/></div>
+        <div class="ff"><label>Yapan</label><select id="ru">${opts}</select></div>
+        <button class="rbtn-save" onclick="saveRes('${part.id}','${m.id}',${m.stock||0},${res})">+ Kaydet</button>
+        <button class="rbtn-cancel" onclick="toggleForm(null)">İptal</button>
+      </div></td>`;
+      tb.appendChild(fr);
+    }
+
+    // reservations list
+    if(m.reservations.length){
+      const lr=document.createElement('tr');lr.className='res-list-wrap';
+      const items=m.reservations.map(r=>
+        '<div class="res-item">'
+        +'<span class="chip cn">👤 '+esc(r.name)+'</span>'
+        +'<span class="chip">📞 '+esc(r.tel)+'</span>'
+        +'<span class="chip cd">📅 '+esc(r.date)+' '+esc(r.time)+'</span>'
+        +'<span class="chip">🖊 '+esc(r.user)+'</span>'
+        +'<button class="chip-use" onclick="useRes(\''+part.id+'\',\''+m.id+'\',\''+r.id+'\','+m.reservations.length+')">✓ Kullan</button>'
+        +'<button class="chip-del" onclick="delRes(\''+part.id+'\',\''+m.id+'\',\''+r.id+'\')">İptal</button>'
+        +'</div>'
+      ).join('');
+      lr.innerHTML='<td colspan="6"><div class="res-list"><div class="res-list-title">Rezervasyonlar ('+m.reservations.length+')</div>'+items+'</div></td>';
+      tb.appendChild(lr);
+    }
+  });
+}
+
+function renderLogs(){
+  const list=document.getElementById('logList');
+  if(!list) return;
+  const CONF={
+    reserve:{dot:'#378ADD',text:'#185FA5',label:'Rezervasyon'},
+    use:    {dot:'#97C459',text:'#3B6D11',label:'Kullanıldı'},
+    stock:  {dot:'#EF9F27',text:'#854F0B',label:'Stok'},
+    cancel: {dot:'#F09595',text:'#A32D2D',label:'İptal'},
+    model:  {dot:'#888780',text:'#5F5E5A',label:'Model'},
+  };
+  const fl=logFilter==='all'?logs:logs.filter(l=>l.type===logFilter);
+  if(!fl.length){list.innerHTML='<div class="log-empty">Henüz hareket yok.</div>';return}
+  list.innerHTML=fl.map(l=>{
+    const c=CONF[l.type]||CONF.model;
+    return '<div class="log-item">'
+      +'<div class="li-top"><div class="li-dot" style="background:'+c.dot+'"></div>'
+      +'<span class="li-type" style="color:'+c.text+'">'+c.label+'</span>'
+      +'<span class="li-time">'+fmtTime(l.ts)+'</span></div>'
+      +'<div class="li-where"><span class="li-part">'+esc(l.partName)+'</span>'
+      +(l.modelName?' <span class="li-model">/ '+esc(l.modelName)+'</span>':'')+'</div>'
+      +'<div class="li-desc">'+esc(l.desc)+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+// ── ACTIONS ──
+window.toggleForm=function(type,partId,modelId){
+  if(!type){openForm=null;render();return}
+  const same=openForm&&openForm.type===type&&openForm.modelId===modelId;
+  openForm=same?null:{type,partId,modelId};
+  render();
+};
+
+window.stepStock=function(modelId,dir){
+  const el=document.getElementById('si_'+modelId);
+  if(el) el.value=Math.max(1,(parseInt(el.value)||1)+dir);
+};
+
+window.saveStock=async function(partId,modelId,dir){
+  const el=document.getElementById('si_'+modelId);
+  const delta=(parseInt(el?el.value:1)||1)*dir;
+  const part=parts.find(p=>p.id===partId);
+  const model=part&&part.models.find(m=>m.id===modelId);
+  if(!model) return;
+  const ns=Math.max(0,(model.stock||0)+delta);
+  await updateDoc(doc(db,'parts',partId,'models',modelId),{stock:ns});
+  await addLog('stock',part.name,model.name,(dir>0?'Stok eklendi (+':'Stok çıkarıldı (−')+Math.abs(delta)+') → Yeni: '+ns);
+  openForm=null;
+};
+
+window.saveRes=async function(partId,modelId,stock,reserved){
+  const name=document.getElementById('rn').value.trim();
+  const tel=document.getElementById('rt').value.trim();
+  const date=document.getElementById('rd').value;
+  const time=document.getElementById('rh').value;
+  const user=document.getElementById('ru').value;
+  if(!name||!tel){alert('Ad Soyad ve Telefon zorunludur.');return}
+  if(!user){alert('Lütfen yapan kişiyi seçin.');return}
+  if(reserved>=stock){alert('Stok yetersiz!');return}
+  const part=parts.find(p=>p.id===partId);
+  const model=part&&part.models.find(m=>m.id===modelId);
+  await addDoc(collection(db,'parts',partId,'models',modelId,'reservations'),{name,tel,date,time,user,createdAt:Date.now()});
+  await addLog('reserve',part?part.name:partId,model?model.name:modelId,name+' için rezervasyon (Yapan: '+user+')');
+  openForm=null;
+};
+
+window.delRes=async function(partId,modelId,resId){
+  if(!confirm('Rezervasyonu iptal et?')) return;
+  const part=parts.find(p=>p.id===partId);
+  const model=part&&part.models.find(m=>m.id===modelId);
+  const res=model&&model.reservations.find(r=>r.id===resId);
+  await deleteDoc(doc(db,'parts',partId,'models',modelId,'reservations',resId));
+  await addLog('cancel',part?part.name:partId,model?model.name:modelId,(res?res.name:'Rezervasyon')+' iptal edildi');
+};
+
+window.useRes=async function(partId,modelId,resId){
+  if(!confirm('Parça kullanıldı olarak işaretlensin mi? Stok 1 düşürülecek.')) return;
+  const part=parts.find(p=>p.id===partId);
+  const model=part&&part.models.find(m=>m.id===modelId);
+  if(!model) return;
+  const res=model.reservations.find(r=>r.id===resId);
+  const ns=Math.max(0,(model.stock||0)-1);
+  await Promise.all([
+    deleteDoc(doc(db,'parts',partId,'models',modelId,'reservations',resId)),
+    updateDoc(doc(db,'parts',partId,'models',modelId),{stock:ns})
+  ]);
+  await addLog('use',part?part.name:partId,model.name,(res?res.name:'Müşteri')+' için kullanıldı, stok: '+ns);
+};
+
+window.delModel=async function(partId,modelId){
+  if(!confirm('Bu modeli silmek istiyor musun?')) return;
+  await deleteDoc(doc(db,'parts',partId,'models',modelId));
+  if(openForm&&openForm.modelId===modelId) openForm=null;
+};
+
+window.addModel=async function(){
+  if(busy) return; busy=true;
+  const name=document.getElementById('modelNameInput').value.trim();
+  const stock=parseInt(document.getElementById('modelStockInput').value)||0;
+  if(!name||!activePart){busy=false;return}
+  await addDoc(collection(db,'parts',activePart,'models'),{name,stock,createdAt:Date.now()});
+  const part=parts.find(p=>p.id===activePart);
+  await addLog('model',part?part.name:activePart,name,name+' eklendi (stok: '+stock+')');
+  busy=false;
+  closeM('modelM');
+  document.getElementById('modelNameInput').value='';
+  document.getElementById('modelStockInput').value='';
+};
+
+window.addPart=async function(){
+  if(busy) return; busy=true;
+  const name=document.getElementById('partNameInput').value.trim();
+  if(!name){busy=false;return}
+  const ref=await addDoc(collection(db,'parts'),{name,order:parts.length,createdAt:Date.now()});
+  activePart=ref.id; localStorage.setItem('ap',ref.id);
+  busy=false; closeM('partM');
+  document.getElementById('partNameInput').value='';
+};
+
+window.addUser=async function(){
+  const val=document.getElementById('newUserInput').value.trim();
+  if(!val) return;
+  await setDoc(doc(db,'config','users'),{list:[...users,val],status:staffSt});
+  document.getElementById('newUserInput').value='';
+};
+
+window.delUser=async function(i){
+  const nl=users.filter((_,j)=>j!==i);
+  const ns={};nl.forEach(u=>{if(staffSt[u]) ns[u]=staffSt[u]});
+  await setDoc(doc(db,'config','users'),{list:nl,status:ns});
+};
+
+window.toggleStaff=async function(name){
+  const cur=staffSt[name]||'available';
+  const nv=cur==='available'?'busy':'available';
+  staffSt[name]=nv;
+  renderStaff();
+  const upd={};upd['status.'+name]=nv;
+  await updateDoc(doc(db,'config','users'),upd);
+};
+
+window.toggleLog=function(){
+  logOpen=!logOpen;
+  document.getElementById('logPanel').classList.toggle('open',logOpen);
+  document.getElementById('logOverlay').classList.toggle('open',logOpen);
+  if(logOpen){
+    unread=0;
+    const b=document.getElementById('nbadge');
+    b.style.display='none';
+    renderLogs();
+  }
+};
+
+window.handleOverlayClick=function(e){
+  if(e.target===document.getElementById('logOverlay')) toggleLog();
+};
+
+window.setLF=function(btn){
+  logFilter=btn.dataset.f;
+  document.querySelectorAll('.lf-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderLogs();
+};
+
+window.clearLogs=async function(){
+  if(!confirm('Tüm hareket geçmişi silinsin mi?')) return;
+  const snap=await getDocs(collection(db,'logs'));
+  await Promise.all(snap.docs.map(d=>deleteDoc(doc(db,'logs',d.id))));
+};
+
+window.onSearch=function(v){
+  srchQ=v.trim().toLowerCase();
+  document.getElementById('srchClear').className='search-clear'+(srchQ?' v':'');
+  renderModels();
+};
+
+window.clearSearch=function(){
+  srchQ='';
+  document.getElementById('srch').value='';
+  document.getElementById('srchClear').className='search-clear';
+  renderModels();
+};
+
+window.openM=function(id){document.getElementById(id).classList.add('open')};
+window.closeM=function(id){document.getElementById(id).classList.remove('open')};
+
+document.querySelectorAll('.modal-ov').forEach(el=>{
+  el.addEventListener('click',e=>{if(e.target===el) el.classList.remove('open')});
+});
+
+start();
+</script>
+
+
+</body></html>
