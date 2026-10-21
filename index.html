@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0062)file:///Users/onurkaynar/Downloads/stok_takip_firebase_14.html -->
-<html lang="tr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Stok Takip</title>
-<link href="./Stok Takip2_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -191,9 +191,9 @@ tbody tr.mrow:hover td{background:var(--gr50)}
 <header>
   <div class="logo"><div class="logo-dot"></div>Stok Takip</div>
   <div class="hbtns">
-    <div class="sync"><div class="sdot" id="sdot"></div><span id="stxt">Canlı</span></div>
-    <button class="hbtn" id="logBtn" onclick="toggleLog()">📋 <span>Hareketler</span><span class="nbadge" id="nbadge" style="display: flex;">2</span></button>
-    <button class="hbtn" onclick="openM(&#39;usersM&#39;)">⚙ <span>Kullanıcılar</span></button>
+    <div class="sync"><div class="sdot" id="sdot"></div><span id="stxt">Bağlanıyor...</span></div>
+    <button class="hbtn" id="logBtn" onclick="toggleLog()">📋 <span>Hareketler</span><span class="nbadge" id="nbadge"></span></button>
+    <button class="hbtn" onclick="openM('usersM')">⚙ <span>Kullanıcılar</span></button>
   </div>
 </header>
 
@@ -221,21 +221,21 @@ tbody tr.mrow:hover td{background:var(--gr50)}
   <div class="modal">
     <h3>👥 Kullanıcı Yönetimi</h3>
     <p style="font-size:13px;color:var(--gr400);margin-bottom:12px">Rezervasyon yapabilecek kullanıcıları ekle.</p>
-    <div id="userList" style="margin-bottom:10px"><div class="user-item">Onur<button class="user-del" onclick="delUser(0)">Sil</button></div><div class="user-item">Rauf<button class="user-del" onclick="delUser(1)">Sil</button></div><div class="user-item">Ufuk<button class="user-del" onclick="delUser(2)">Sil</button></div><div class="user-item">Mert<button class="user-del" onclick="delUser(3)">Sil</button></div><div class="user-item">Özer<button class="user-del" onclick="delUser(4)">Sil</button></div><div class="user-item">Burak<button class="user-del" onclick="delUser(5)">Sil</button></div><div class="user-item">Hilal<button class="user-del" onclick="delUser(6)">Sil</button></div><div class="user-item">Uğur<button class="user-del" onclick="delUser(7)">Sil</button></div><div class="user-item">Emin<button class="user-del" onclick="delUser(8)">Sil</button></div></div>
+    <div id="userList" style="margin-bottom:10px"></div>
     <div class="uadd-row">
-      <input id="newUserInput" placeholder="Yeni kullanıcı adı...">
+      <input id="newUserInput" placeholder="Yeni kullanıcı adı..."/>
       <button class="uadd-btn" onclick="addUser()">+ Ekle</button>
     </div>
-    <div class="mbtns"><button class="mbtn-cancel" onclick="closeM(&#39;usersM&#39;)">Kapat</button></div>
+    <div class="mbtns"><button class="mbtn-cancel" onclick="closeM('usersM')">Kapat</button></div>
   </div>
 </div>
 
 <div class="modal-ov" id="partM">
   <div class="modal">
     <h3>Yeni Parça Ekle</h3>
-    <input id="partNameInput" placeholder="Parça adı (örn: Ekran)">
+    <input id="partNameInput" placeholder="Parça adı (örn: Ekran)"/>
     <div class="mbtns">
-      <button class="mbtn-cancel" onclick="closeM(&#39;partM&#39;)">İptal</button>
+      <button class="mbtn-cancel" onclick="closeM('partM')">İptal</button>
       <button class="mbtn-save" onclick="addPart()">Ekle</button>
     </div>
   </div>
@@ -244,10 +244,10 @@ tbody tr.mrow:hover td{background:var(--gr50)}
 <div class="modal-ov" id="modelM">
   <div class="modal">
     <h3>Yeni Model Ekle</h3>
-    <input id="modelNameInput" placeholder="Model adı (örn: iPhone 15)">
-    <input id="modelStockInput" type="number" placeholder="Başlangıç stok miktarı" min="0">
+    <input id="modelNameInput" placeholder="Model adı (örn: iPhone 15)"/>
+    <input id="modelStockInput" type="number" placeholder="Başlangıç stok miktarı" min="0"/>
     <div class="mbtns">
-      <button class="mbtn-cancel" onclick="closeM(&#39;modelM&#39;)">İptal</button>
+      <button class="mbtn-cancel" onclick="closeM('modelM')">İptal</button>
       <button class="mbtn-save" onclick="addModel()">Ekle</button>
     </div>
   </div>
@@ -255,28 +255,35 @@ tbody tr.mrow:hover td{background:var(--gr50)}
 
 <!-- MAIN -->
 <div class="wrap">
-  <div class="staff-panel" id="staffPanel" style="display: block;">
+  <div class="staff-panel" id="staffPanel">
     <div class="staff-panel-title">👥 Personel Durumu</div>
-    <div class="staff-list" id="staffList"><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Onur</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div><div class="staff-item" style="border-color: rgb(192, 221, 151);"><span class="staff-name">Rauf</span><button class="staff-btn" style="background: rgb(234, 243, 222); color: var(--g600);">✓ Müsait</button></div><div class="staff-item" style="border-color: rgb(192, 221, 151);"><span class="staff-name">Ufuk</span><button class="staff-btn" style="background: rgb(234, 243, 222); color: var(--g600);">✓ Müsait</button></div><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Mert</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Özer</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Burak</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Hilal</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Uğur</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div><div class="staff-item" style="border-color: rgb(247, 193, 193);"><span class="staff-name">Emin</span><button class="staff-btn" style="background: rgb(252, 235, 235); color: var(--r600);">✗ Müsait Değil</button></div></div>
+    <div class="staff-list" id="staffList"></div>
   </div>
 
-  <div class="stat-card">
-    <div class="stat-label">🕐 Rezerve</div>
-    <div class="stat-value" id="totalReserved">0</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1.25rem;">
+    <div class="stat-card">
+      <div class="stat-label">🕐 Bu Bölüm Rezerve</div>
+      <div class="stat-value" id="totalReserved">—</div>
+    </div>
+    <div class="stat-card" style="background:var(--b50);">
+      <div class="stat-label" style="color:var(--b600);">📊 Tüm Bölümler Toplam</div>
+      <div class="stat-value" style="color:var(--b800);" id="grandTotal">—</div>
+      <div id="grandTotalDetail" style="font-size:11px;color:var(--b600);margin-top:6px;line-height:1.6;"></div>
+    </div>
   </div>
 
   <div class="tabs-label">Parçalar</div>
-  <div class="tabs" id="tabs"><button class="tab active">Batarya</button><button class="tab">Ekran</button><button class="tab">Kamera</button><button class="tab">Face ID</button><button class="tab">Arka Cam</button><button class="tab">Airpods</button><button class="tab-add">+ Parça Ekle</button></div>
+  <div class="tabs" id="tabs"></div>
 
   <div class="tbl-header">
-    <div class="tbl-title" id="tblTitle">Modeller — Batarya</div>
+    <div class="tbl-title" id="tblTitle">Modeller</div>
     <div class="tbl-actions">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input type="text" id="srch" placeholder="Model ara..." oninput="onSearch(this.value)">
+        <input type="text" id="srch" placeholder="Model ara..." oninput="onSearch(this.value)"/>
         <button class="search-clear" id="srchClear" onclick="clearSearch()">✕</button>
       </div>
-      <button class="btn-add" onclick="openM(&#39;modelM&#39;)">+ Model Ekle</button>
+      <button class="btn-add" onclick="openM('modelM')">+ Model Ekle</button>
     </div>
   </div>
 
@@ -285,250 +292,7 @@ tbody tr.mrow:hover td{background:var(--gr50)}
       <thead>
         <tr><th>Model</th><th>Stok</th><th>Rezerve</th><th>Kalan</th><th>Durum</th><th>İşlem</th></tr>
       </thead>
-      <tbody id="tbody"><tr class="mrow"><td class="mname">iPhone SE 3</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;KXmx7N8Yx1HToteQRfLY&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;KXmx7N8Yx1HToteQRfLY&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;KXmx7N8Yx1HToteQRfLY&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 11</td>
-      <td><span class="num nb">0</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">0</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;7sk4iW6OiiTDYFWOlvwZ&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;7sk4iW6OiiTDYFWOlvwZ&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;7sk4iW6OiiTDYFWOlvwZ&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 12 Mini</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;G5VbzzeHYwRDGARvBVBN&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;G5VbzzeHYwRDGARvBVBN&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;G5VbzzeHYwRDGARvBVBN&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 12 / Pro</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;KZnM6E5Yb58NZa8e0Fts&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;KZnM6E5Yb58NZa8e0Fts&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;KZnM6E5Yb58NZa8e0Fts&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 12 Pro Max</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;bmRnDAuw0v8FZvx9NeWx&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;bmRnDAuw0v8FZvx9NeWx&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;bmRnDAuw0v8FZvx9NeWx&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 13 Mini</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;uWZsGvZpGrbGLOhO8LSI&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;uWZsGvZpGrbGLOhO8LSI&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;uWZsGvZpGrbGLOhO8LSI&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 13</td>
-      <td><span class="num nb">0</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">0</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;oCFFX6COVHVfk0zdS0sb&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;oCFFX6COVHVfk0zdS0sb&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;oCFFX6COVHVfk0zdS0sb&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 13 Pro</td>
-      <td><span class="num nb">2</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">2</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;PlcQhNmFnYu1WdQap2RY&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;PlcQhNmFnYu1WdQap2RY&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;PlcQhNmFnYu1WdQap2RY&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 13 Pro Max</td>
-      <td><span class="num nb">0</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">0</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;7AaLm9qp1FY40rPKkntc&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;7AaLm9qp1FY40rPKkntc&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;7AaLm9qp1FY40rPKkntc&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 14</td>
-      <td><span class="num nb">0</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">0</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;V23oRxPV1aUeVTKOELx3&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;V23oRxPV1aUeVTKOELx3&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;V23oRxPV1aUeVTKOELx3&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 14 Plus</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;xK1ZwBOI1ZzM772qqYpx&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;xK1ZwBOI1ZzM772qqYpx&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;xK1ZwBOI1ZzM772qqYpx&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 14 Pro</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;LI3bGJV1mXSeuLdtDEup&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;LI3bGJV1mXSeuLdtDEup&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;LI3bGJV1mXSeuLdtDEup&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 14 Pro Max</td>
-      <td><span class="num nb">0</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">0</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;fNL3NM6RdpaPUINmel53&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;fNL3NM6RdpaPUINmel53&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;fNL3NM6RdpaPUINmel53&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 15</td>
-      <td><span class="num nb">0</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">0</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;mbOoP1t02FXU7DD32fOg&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;mbOoP1t02FXU7DD32fOg&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;mbOoP1t02FXU7DD32fOg&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 15 Plus</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;vW0j0XPxgkwgQYBXyCqf&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;vW0j0XPxgkwgQYBXyCqf&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;vW0j0XPxgkwgQYBXyCqf&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 15 Pro</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;saotMyM1d1dP1ScWJnKc&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;saotMyM1d1dP1ScWJnKc&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;saotMyM1d1dP1ScWJnKc&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 15 Pro Max</td>
-      <td><span class="num nb">0</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">0</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ukQmHGD0ClrJJgMLCN36&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ukQmHGD0ClrJJgMLCN36&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ukQmHGD0ClrJJgMLCN36&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 16E</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;c0uPaQGaUXfvt2JOovIg&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;c0uPaQGaUXfvt2JOovIg&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;c0uPaQGaUXfvt2JOovIg&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 16</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;FGrU4dlG6YNaijZBwKoV&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;FGrU4dlG6YNaijZBwKoV&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;FGrU4dlG6YNaijZBwKoV&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 16 Plus</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;8v1Z2YfqlsrAKIdxapsW&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;8v1Z2YfqlsrAKIdxapsW&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;8v1Z2YfqlsrAKIdxapsW&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 16 Pro</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ueT8Jiiox6eFSiC0xQ7F&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ueT8Jiiox6eFSiC0xQ7F&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ueT8Jiiox6eFSiC0xQ7F&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 16 Pro Max</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;8Ms4cZ97Uroh1fPErpgb&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;8Ms4cZ97Uroh1fPErpgb&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;8Ms4cZ97Uroh1fPErpgb&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 17E</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;nfBRaEwUgZQ71kK3b9vw&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;nfBRaEwUgZQ71kK3b9vw&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;nfBRaEwUgZQ71kK3b9vw&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 17</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;W0WrDJHsTqS86wCn0WII&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;W0WrDJHsTqS86wCn0WII&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;W0WrDJHsTqS86wCn0WII&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 17 Pro</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;zfRlzmzNc1FQNwc4GS5G&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;zfRlzmzNc1FQNwc4GS5G&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;zfRlzmzNc1FQNwc4GS5G&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone 17 Pro Max</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ITdRMtUW0KleOr2nWZAS&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ITdRMtUW0KleOr2nWZAS&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;ITdRMtUW0KleOr2nWZAS&#39;)">Sil</button>
-      </td></tr><tr class="mrow"><td class="mname">iPhone Air</td>
-      <td><span class="num nb">1</span></td>
-      <td><span class="num na">0</span></td>
-      <td><span class="num ng">1</span></td>
-      <td><span class="badge br">Kritik</span></td>
-      <td>
-        <button class="abtn ab-res" onclick="toggleForm(&#39;reserve&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;uOCW7sVwpF69jloyBjRe&#39;)">Rezerve Et</button>
-        <button class="abtn ab-stk" onclick="toggleForm(&#39;stock&#39;,&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;uOCW7sVwpF69jloyBjRe&#39;)">Stok Güncelle</button>
-        <button class="abtn ab-del" onclick="delModel(&#39;PVQxChlkFp9HO3n24tdX&#39;,&#39;uOCW7sVwpF69jloyBjRe&#39;)">Sil</button>
-      </td></tr></tbody>
+      <tbody id="tbody"><tr><td colspan="6" class="loading">Yükleniyor...</td></tr></tbody>
     </table>
   </div>
 </div>
@@ -709,6 +473,20 @@ function renderStats(){
   part.models.forEach(m=>res+=m.reservations.length);
   document.getElementById('totalReserved').textContent=res;
   document.getElementById('tblTitle').textContent='Modeller — '+part.name;
+
+  // Tüm bölümlerin toplamı
+  let grand=0;
+  const details=[];
+  parts.forEach(p=>{
+    let pr=0;
+    p.models.forEach(m=>pr+=m.reservations.length);
+    grand+=pr;
+    if(pr>0) details.push(esc(p.name)+': '+pr);
+  });
+  document.getElementById('grandTotal').textContent=grand;
+  document.getElementById('grandTotalDetail').innerHTML=details.length
+    ? details.join('<br>')
+    : '<span style="color:var(--gr400)">Rezervasyon yok</span>';
 }
 
 function renderStaff(){
@@ -1023,6 +801,5 @@ document.querySelectorAll('.modal-ov').forEach(el=>{
 
 start();
 </script>
-
-
-</body></html>
+</body>
+</html>
