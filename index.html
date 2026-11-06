@@ -344,6 +344,18 @@ function fmtTime(ts){
 function getAP(){return parts.find(p=>p.id===activePart)}
 function status(k){return k>20?{l:'Yeterli',c:'bg'}:k>5?{l:'Az',c:'ba'}:{l:'Kritik',c:'br'}}
 
+// ── REZERVASYON DETAY METNİ ──
+function resDetail(r){
+  if(!r) return '';
+  const parts=[];
+  if(r.name) parts.push('Ad Soyad: '+r.name);
+  if(r.tel) parts.push('Tel: '+r.tel);
+  if(r.date||r.time) parts.push('Randevu: '+(r.date?r.date.split('-').reverse().join('.'):'-')+' '+(r.time||''));
+  if(r.user) parts.push('Rezervasyonu yapan: '+r.user);
+  if(r.createdAt) parts.push('Oluşturulma: '+fmtTime(r.createdAt));
+  return parts.join(' | ');
+}
+
 // ── ADDLOG ──
 async function addLog(type,partName,modelName,desc){
   try{
@@ -629,7 +641,7 @@ function renderLogs(){
       +'<span class="li-time">'+fmtTime(l.ts)+'</span></div>'
       +'<div class="li-where"><span class="li-part">'+esc(l.partName)+'</span>'
       +(l.modelName?' <span class="li-model">/ '+esc(l.modelName)+'</span>':'')+'</div>'
-      +'<div class="li-desc">'+esc(l.desc)+'</div>'
+      +'<div class="li-desc">'+esc(l.desc).split(' | ').join('<br>')+'</div>'
       +'</div>';
   }).join('');
 }
@@ -671,7 +683,7 @@ window.saveRes=async function(partId,modelId,stock,reserved){
   const part=parts.find(p=>p.id===partId);
   const model=part&&part.models.find(m=>m.id===modelId);
   await addDoc(collection(db,'parts',partId,'models',modelId,'reservations'),{name,tel,date,time,user,createdAt:Date.now()});
-  await addLog('reserve',part?part.name:partId,model?model.name:modelId,name+' için rezervasyon (Yapan: '+user+')');
+  await addLog('reserve',part?part.name:partId,model?model.name:modelId,'Yeni rezervasyon → '+resDetail({name,tel,date,time,user}));
   openForm=null;
 };
 
@@ -681,7 +693,7 @@ window.delRes=async function(partId,modelId,resId){
   const model=part&&part.models.find(m=>m.id===modelId);
   const res=model&&model.reservations.find(r=>r.id===resId);
   await deleteDoc(doc(db,'parts',partId,'models',modelId,'reservations',resId));
-  await addLog('cancel',part?part.name:partId,model?model.name:modelId,(res?res.name:'Rezervasyon')+' iptal edildi');
+  await addLog('cancel',part?part.name:partId,model?model.name:modelId,'Rezervasyon iptal edildi → '+(res?resDetail(res):'bilgi bulunamadı'));
 };
 
 window.useRes=async function(partId,modelId,resId){
@@ -695,7 +707,7 @@ window.useRes=async function(partId,modelId,resId){
     deleteDoc(doc(db,'parts',partId,'models',modelId,'reservations',resId)),
     updateDoc(doc(db,'parts',partId,'models',modelId),{stock:ns})
   ]);
-  await addLog('use',part?part.name:partId,model.name,(res?res.name:'Müşteri')+' için kullanıldı, stok: '+ns);
+  await addLog('use',part?part.name:partId,model.name,'Parça kullanıldı (stok: '+ns+') → '+(res?resDetail(res):'bilgi bulunamadı'));
 };
 
 window.delModel=async function(partId,modelId){
